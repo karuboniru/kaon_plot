@@ -5,6 +5,7 @@
 #include <TROOT.h>
 #include <event.h>
 #include <fstream>
+#include <filesystem>
 #include <iostream>
 #include <memory>
 #include <nlohmann/json.hpp>
@@ -26,6 +27,7 @@ int main(int argc, const char **argv) {
     }
     ifs >> config;
   }
+//  std::string output_path = config["output_path"];
   std::filesystem::path output_path = config["output_path"];
   if (!output_path.parent_path().empty()) {
     std::cout << "Creating output directory " << output_path.parent_path()
@@ -95,7 +97,7 @@ int main(int argc, const char **argv) {
                   },
                   {"event"});
           
-  std::vector<ROOT::RDF::RResultPtr<TH1>> objs_list{};
+  std::vector<ROOT::RDF::RResultPtr<TH1D>> objs_list{};
   auto spline_file =
       get_object<TGraph>(config["spline_file"], config["spline_path"]);
   auto add_plot = [&](auto &&dataset_, const char *name, const char *varname) {
@@ -111,3 +113,4 @@ int main(int argc, const char **argv) {
   save(objs_list, file);
   return 0;
 }
+
